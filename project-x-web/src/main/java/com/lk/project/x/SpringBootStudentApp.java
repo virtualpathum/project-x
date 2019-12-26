@@ -40,7 +40,7 @@ public class SpringBootStudentApp {
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.lk.student.manager")).build();
+				.apis(RequestHandlerSelectors.basePackage("com.lk.project.x")).build();
 				//.paths(PathSelectors.any())
 				//.build();
 	}
@@ -50,7 +50,7 @@ public class SpringBootStudentApp {
 		return new WebMvcConfigurerAdapter() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/student-web/api/user").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/project-x/api/user").allowedOrigins("http://localhost:3000");
 			}
 		};
 	}
