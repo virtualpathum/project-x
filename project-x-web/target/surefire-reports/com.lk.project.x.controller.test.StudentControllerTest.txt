@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.lk.project.x.controller.test.StudentControllerTest
--------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.086 sec - in com.lk.project.x.controller.test.StudentControllerTest
