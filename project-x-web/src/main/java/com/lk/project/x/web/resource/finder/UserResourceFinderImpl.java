@@ -29,7 +29,7 @@ public class UserResourceFinderImpl extends AbstractResourceFinder<UserResource,
     @Override
     public UserResource findById(Long id) {
 
-        UserEntity entity = repo.findOne(id);
+        UserEntity entity = repo.findById(id).orElse(null);
         return mapper.asResource(entity);
 
     }

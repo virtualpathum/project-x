@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Optional;
 
 @Named("userService")
 public class UserServiceImpl implements UserService {
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        repo.delete(id);
+        repo.deleteById(id);
     }
 
     private UserResource createStudent(UserResource resource) {
@@ -41,9 +42,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserResource updateStudent(UserResource resource) {
-        UserEntity entity = repo.findOne(resource.getId());
+        Optional<UserEntity> optionalEntity = Optional.ofNullable(repo.findById(resource.getId()).orElse(null));
         // TODO: perform optimistic locking check
-        entity = mapper.updateEntity(resource, entity);
+        UserEntity entity = mapper.updateEntity(resource, optionalEntity.get());
 
         entity = repo.saveAndFlush(entity);
         return mapper.updateResource(entity, resource);

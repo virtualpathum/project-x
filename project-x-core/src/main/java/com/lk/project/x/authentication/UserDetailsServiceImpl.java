@@ -23,17 +23,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userNameOrEmail) throws UsernameNotFoundException {
 
-        UserEntity user = repo.findByUserName(username);
-        if (user == null) throw new UsernameNotFoundException(username);
+        UserEntity user = repo.findByUserNameOrEmail(userNameOrEmail, userNameOrEmail);
+        if (user == null) throw new UsernameNotFoundException("User not found with username or email : " + userNameOrEmail);
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         for (RoleEntity role : user.getRoles()){
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
 
-        return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), grantedAuthorities);
+        return UserPrincipal.create(user);
+    }
 
+    // This method is used by JWTAuthenticationFilter
+    @Transactional
+    public UserDetails loadUserById(Long id) {
+        UserEntity user = repo.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("User not found with id : " + id)
+        );
+
+        return UserPrincipal.create(user);
     }
 }

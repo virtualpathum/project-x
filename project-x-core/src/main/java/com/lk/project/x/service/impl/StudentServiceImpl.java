@@ -15,6 +15,8 @@ import com.lk.project.x.repo.StudentRepository;
 import com.lk.project.x.resource.StudentResource;
 import com.lk.project.x.service.StudentService;
 
+import java.util.Optional;
+
 // TODO: Auto-generated Javadoc
 /**
  * @author virtualpathum
@@ -49,7 +51,7 @@ public class StudentServiceImpl implements StudentService {
 	 */
 	@Override
 	public void delete(Long id) {
-		repo.delete(id);
+		repo.deleteById(id);
 	}
 
 	/**
@@ -60,11 +62,7 @@ public class StudentServiceImpl implements StudentService {
 	 */
 	private StudentResource createStudent(StudentResource resource) {
 		StudentEntity entity = mapper.asEntity(resource);
-        System.out.println("/// mapper : " + mapper);
-        System.out.println("/// repo : " + repo);
-        System.out.println("/// entity : " + entity);
-
-		return mapper.asResource(repo.saveAndFlush(entity));
+        return mapper.asResource(repo.saveAndFlush(entity));
 	}
 
 	/**
@@ -74,9 +72,9 @@ public class StudentServiceImpl implements StudentService {
 	 * @return the student resource
 	 */
 	private StudentResource updateStudent(StudentResource resource) {
-		StudentEntity entity = repo.findOne(resource.getId());
+		Optional<StudentEntity> optionalEntity = repo.findById(resource.getId());
 		// TODO: perform optimistic locking check
-		entity = mapper.updateEntity(resource, entity);
+		StudentEntity entity = mapper.updateEntity(resource, optionalEntity.get());
 
 		entity = repo.saveAndFlush(entity);
 		return mapper.updateResource(entity, resource);

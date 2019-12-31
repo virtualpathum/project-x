@@ -29,7 +29,7 @@ public class BlogPostResourceFinderImpl extends AbstractResourceFinder<BlogPostR
     @Override
     public BlogPostResource findById(Long id) {
 
-        BlogPostEntity entity = repo.findOne(id);
+        BlogPostEntity entity = repo.findById(id).orElse(null);
             return mapper.asResource(entity);
     }
 

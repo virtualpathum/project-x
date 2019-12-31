@@ -39,7 +39,7 @@ public class StudentResourceFinderImpl extends AbstractResourceFinder<StudentRes
 	@Override
 	public StudentResource findById(Long id) {
 
-		StudentEntity entity = repo.findOne(id);
+		StudentEntity entity = repo.findById(id).orElse(null);
 		return mapper.asResource(entity);
 		
 	}

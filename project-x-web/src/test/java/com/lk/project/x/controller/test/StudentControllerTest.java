@@ -12,10 +12,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.lk.project.x.controller.StudentController;
-import org.apache.log4j.Logger;
+
 import org.junit.Test;
 
 import com.lk.project.x.resource.StudentResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class StudentControllerTest.
@@ -26,7 +28,7 @@ import com.lk.project.x.resource.StudentResource;
 // Need to use Jmokit to mock the services
 public class StudentControllerTest extends AbstractControllerTest {
 	
-	Logger LOG = Logger.getLogger(StudentControllerTest.class);
+	Logger LOG = LoggerFactory.getLogger(StudentControllerTest.class);
 	
 	/** The controller. */
 	@Inject

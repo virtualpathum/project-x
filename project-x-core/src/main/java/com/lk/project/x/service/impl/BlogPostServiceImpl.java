@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Optional;
 
 @Named("blogPostService")
 public class BlogPostServiceImpl implements BlogPostService {
@@ -31,7 +32,7 @@ public class BlogPostServiceImpl implements BlogPostService {
 
     @Override
     public void delete(Long id) {
-        repo.delete(id);
+        repo.deleteById(id);
     }
 
     private BlogPostResource create(BlogPostResource resource) {
@@ -41,9 +42,9 @@ public class BlogPostServiceImpl implements BlogPostService {
     }
 
     private BlogPostResource update(BlogPostResource resource) {
-        BlogPostEntity entity = repo.findOne(resource.getId());
+        Optional<BlogPostEntity> optionalEntity = repo.findById(resource.getId());
         // TODO: perform optimistic locking check
-        entity = mapper.updateEntity(resource, entity);
+        BlogPostEntity entity = mapper.updateEntity(resource, optionalEntity.get());
 
         entity = repo.saveAndFlush(entity);
         return mapper.updateResource(entity, resource);

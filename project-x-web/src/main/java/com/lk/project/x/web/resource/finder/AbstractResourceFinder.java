@@ -47,7 +47,7 @@ public abstract class AbstractResourceFinder<R extends AbstractResource<ID>, E,
 
 	/** {@inheritDoc} */
 	public R findOne(ID id) {
-		E entity = repo.findOne(id);
+		E entity = repo.findById(id).orElse(null);
 		return toResource(entity);
 	}
 

@@ -1,3 +1,4 @@
+/*
 package com.lk.project.x.authentication;
 
 public interface SecurityService {
@@ -6,3 +7,4 @@ public interface SecurityService {
 
     void autoLogin(String username, String password);
 }
+*/

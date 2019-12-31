@@ -39,7 +39,7 @@ public class UserController {
     }
 
     /**
-     * List all students.
+     * List all.
      *
      * @return the list
      */
@@ -63,7 +63,7 @@ public class UserController {
     }
 
     /**
-     * Creates the student.
+     * Creates.
      *
      * @param resource the resource
      * @return the student resource
@@ -78,7 +78,7 @@ public class UserController {
     }
 
     /**
-     * Update student.
+     * Update.
      *
      * @param id the id
      * @param resource the resource
@@ -93,13 +93,25 @@ public class UserController {
     }
 
     /**
-     * Delete student.
+     * Delete.
      *
      * @param id the id
      */
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") long id) {
+        logger.info("Fetching & Deleting User with id {}", id);
+        service.delete(id);
+    }
+
+    /**
+     * Delete.
+     *
+     * @param id the id
+     */
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value = "/user/register", method = RequestMethod.DELETE)
+    public void register(@PathVariable("id") long id) {
         logger.info("Fetching & Deleting User with id {}", id);
         service.delete(id);
     }
