@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<Context reloadable="true">
+   	<Resource name="jdbc/student-manager" auth="Container"
+   	    type="javax.sql.DataSource"
+   	    maxTotal="20"
+   	    maxIdle="10"
+		maxWaitMillis="-1"
+		driverClassName="org.postgresql.Driver"
+		url="jdbc:postgresql://localhost:5432/student-manager"
+		user="postgres"
+		password="abc123" />
+</Context>
