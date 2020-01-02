@@ -30,11 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         try {
-
-            System.out.println("/// Inside doFilterInternal");
-            System.out.println("/// httpServletRequest AuthType : " + httpServletRequest.getAuthType());
             String jwt = getJwtFromRequest(httpServletRequest);
-            System.out.println("/// jwt : " + jwt);
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 Long userId = tokenProvider.getUserIdFromJWT(jwt);
 
@@ -45,16 +41,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
-            System.out.println("//// Error");
             logger.error("Could not set user authentication in security context", ex);
         }
-        System.out.println("/// calling doFilter");
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        System.out.println("//// bearerToken : " + bearerToken);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
         }

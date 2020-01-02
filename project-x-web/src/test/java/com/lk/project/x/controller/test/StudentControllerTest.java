@@ -18,6 +18,7 @@ import org.junit.Test;
 import com.lk.project.x.resource.StudentResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The Class StudentControllerTest.
@@ -39,6 +40,7 @@ public class StudentControllerTest extends AbstractControllerTest {
 	 * Test create student method.
 	 */
 	@Test
+	//@Transactional
 	public void testCreateStudentMethod() {
 		
 		//Creating the student
@@ -61,7 +63,7 @@ public class StudentControllerTest extends AbstractControllerTest {
 		
 		List<StudentResource> list = controller.listAllStudents();
 		assertNotNull(list);
-		assertEquals(1, list.size());
+		assertEquals(2, list.size());
 		LOG.info("student list : " + list.size());
 
 	}

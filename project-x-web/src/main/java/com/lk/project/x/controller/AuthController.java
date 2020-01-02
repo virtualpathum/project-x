@@ -48,7 +48,6 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsernameOrEmail(),
@@ -64,8 +63,6 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        System.out.println("//// inside register User");
-        System.out.println("//// signUpRequest : " + signUpRequest.getUsername());
         if(userRepository.existsByUserName(signUpRequest.getUsername())) {
             return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
@@ -75,22 +72,18 @@ public class AuthController {
             return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
-        System.out.println("//// AAAAAAAA");
         // Creating user's account
         UserEntity user = new UserEntity();
         user.setFirstName(signUpRequest.getName());
         user.setUserName(signUpRequest.getUsername());
         user.setEmail(signUpRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
-        RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER);
-
-        System.out.println("//// userRole : " + userRole);
+        RoleEntity userRole = roleRepository.findByName("ROLE_USER");
 
         user.setRoles(Collections.singleton(userRole));
 
         UserEntity result = userRepository.save(user);
-        System.out.println("//// created User : " + result);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/user/"+user.getId())

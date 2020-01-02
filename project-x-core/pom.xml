@@ -13,7 +13,7 @@
 		<javax.inject.version>1</javax.inject.version>
 		<org.springframework.version>5.2.2.RELEASE</org.springframework.version>
 		<org.springframework.orm.version>5.2.2.RELEASE</org.springframework.orm.version>
-		<org.springframework.data.version>2.2.2.RELEASE</org.springframework.data.version>
+		<org.springframework.data.version>2.2.3.RELEASE</org.springframework.data.version>
 		<org.springframework.test.version>4.0.5.RELEASE</org.springframework.test.version>
 		<org.springframework.web.version>4.3.10.RELEASE</org.springframework.web.version>
 		<org.springframework.jdbc.version>3.2.2.RELEASE</org.springframework.jdbc.version>
@@ -49,13 +49,6 @@
 			<version>${javax.inject.version}</version>
 		</dependency>
 		
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${org.springframework.orm.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
@@ -122,7 +115,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.2.10.Final</version>
+			<version>5.4.10.Final</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
@@ -132,30 +125,7 @@
 			<version>42.2.8.jre7</version>
 		</dependency>
 		
-	<!--	<dependency>
-			<groupId>postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>${postgresql.version}</version>
-		</dependency>-->
-
-
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-		<!--<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.17</version>
-		</dependency>-->
-
-
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.1.Final</version>
-		</dependency>
-
-
-		<!-- https://mvnrepository.com/artifact/org.eclipse.persistence/javax.persistence -->
-		<!-- https://mvnrepository.com/artifact/org.eclipse.persistence/javax.persistence -->
+			<!-- https://mvnrepository.com/artifact/org.eclipse.persistence/javax.persistence -->
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>javax.persistence</artifactId>
@@ -177,28 +147,6 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>5.2.1.RELEASE</version>
 		</dependency>
-
-
-		<!--&lt;!&ndash; https://mvnrepository.com/artifact/com.mysema.querydsl/querydsl-core &ndash;&gt;
-		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-core</artifactId>
-			<version>3.7.4</version>
-		</dependency>
-
-		&lt;!&ndash; https://mvnrepository.com/artifact/com.mysema.querydsl/querydsl-jpa &ndash;&gt;
-		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-jpa</artifactId>
-			<version>3.7.4</version>
-		</dependency>-->
-		
-<!-- 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.1</version>
-		</dependency> -->
-
 
 	</dependencies>
 	<build>
