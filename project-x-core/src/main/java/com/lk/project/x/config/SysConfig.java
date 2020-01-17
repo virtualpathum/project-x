@@ -47,7 +47,7 @@ public class SysConfig {
 	/** The Constant jndiNamespace. */
 	public static final String jndiNamespace = "java:comp/env/jdbc/project-x";
 
-	
+
 
 	@Bean
 	@Primary
@@ -55,7 +55,8 @@ public class SysConfig {
 	    DriverManagerDataSource dataSource = new DriverManagerDataSource();
 	    dataSource.setDriverClassName("org.postgresql.Driver");
 
-	    dataSource.setUrl("jdbc:postgresql://project-x.c8d8t9ylweam.ap-southeast-1.rds.amazonaws.com:5455/project-x");
+	    //dataSource.setUrl("jdbc:postgresql://project-x.c8d8t9ylweam.ap-southeast-1.rds.amazonaws.com:5455/project-x");
+		dataSource.setUrl("jdbc:postgresql://172.17.0.2:5432/projectx");
 	    dataSource.setUsername("postgres");
 	    dataSource.setPassword("post-gres");
 

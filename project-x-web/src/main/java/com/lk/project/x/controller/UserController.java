@@ -43,7 +43,7 @@ public class UserController {
      *
      * @return the list
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping(value = "/user/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<UserResource> listAll() {
@@ -53,7 +53,7 @@ public class UserController {
 
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserResource get(@PathVariable("id") long id) {
@@ -68,7 +68,7 @@ public class UserController {
      * @param resource the resource
      * @return the student resource
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping(value = "/user/", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public UserResource create(@RequestBody UserResource resource) {
@@ -84,7 +84,7 @@ public class UserController {
      * @param resource the resource
      * @return the student resource
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public UserResource update(@PathVariable("id") long id, @RequestBody UserResource resource) {
@@ -97,7 +97,7 @@ public class UserController {
      *
      * @param id the id
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") long id) {
         logger.info("Fetching & Deleting User with id {}", id);
@@ -109,7 +109,7 @@ public class UserController {
      *
      * @param id the id
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping(value = "/user/register", method = RequestMethod.DELETE)
     public void register(@PathVariable("id") long id) {
         logger.info("Fetching & Deleting User with id {}", id);

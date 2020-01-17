@@ -26,7 +26,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Import({SysConfig.class})
 @SpringBootApplication(scanBasePackages={"com.lk.project.x"})
 @EnableSwagger2
-public class SpringBootStudentApp {
+public class SpringBootMain {
 
 	/**
 	 * The main method.
@@ -34,7 +34,7 @@ public class SpringBootStudentApp {
 	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootStudentApp.class, args);
+		SpringApplication.run(SpringBootMain.class, args);
 	}
 
 	@Bean
@@ -51,7 +51,7 @@ public class SpringBootStudentApp {
 		return new WebMvcConfigurerAdapter() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/project-x/api/user").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/api/auth/").allowedOrigins("*");
 			}
 		};
 	}
