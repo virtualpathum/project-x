@@ -9,4 +9,6 @@ public interface UserResourceFinder extends ResourceFinder<UserResource, Long> {
     List<UserResource> findAllUsers();
 
     UserResource findById(Long id);
+
+    UserResource findUserByEmail(String email);
 }

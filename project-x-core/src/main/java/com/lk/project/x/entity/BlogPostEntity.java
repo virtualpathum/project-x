@@ -55,7 +55,6 @@ public class BlogPostEntity extends AbstractEntity {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, title, content);
     }
 

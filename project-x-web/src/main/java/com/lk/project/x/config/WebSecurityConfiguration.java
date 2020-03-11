@@ -28,7 +28,9 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {
+        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class
+})
 @EnableWebSecurity //Enables Spring Security
 @EnableGlobalMethodSecurity(
         securedEnabled = true, //It enables the @Secured annotation using which you can protect your controller/service methods
@@ -92,15 +94,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
+                .antMatchers("/","/favicon.ico","/**/*.png","/**/*.gif","/**/*.svg","/**/*.jpg","/**/*.html","/**/*.css","/**/*.js")
                 .permitAll()
 
                 .antMatchers("/api/auth/**")

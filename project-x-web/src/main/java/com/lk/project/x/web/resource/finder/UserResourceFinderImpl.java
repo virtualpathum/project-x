@@ -35,6 +35,12 @@ public class UserResourceFinderImpl extends AbstractResourceFinder<UserResource,
     }
 
     @Override
+    public UserResource findUserByEmail(String email) {
+        UserEntity entity = repo.findByEmail(email);
+        return mapper.asResource(entity);
+    }
+
+    @Override
     public List<UserResource> findAllUsers() {
         List<UserEntity> list = repo.findAll();
         return toResources(list);

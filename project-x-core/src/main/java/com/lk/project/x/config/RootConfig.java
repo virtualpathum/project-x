@@ -28,22 +28,22 @@ public class RootConfig {
 	
 	/**
 	 * Jackson object mapper.
-	 *
-	 * @return the object mapper
-	 */
-	@Bean
-	public ObjectMapper jacksonObjectMapper() {
+			 *
+			 * @return the object mapper
+			 */
+@Bean
+public ObjectMapper jacksonObjectMapper() {
 		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
 
 		builder.timeZone(TimeZone.getDefault());
 		builder.serializationInclusion(Include.NON_NULL);
 		builder.featuresToDisable(
-				DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		builder.featuresToEnable(
-				DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+		DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 		builder.defaultViewInclusion(Boolean.TRUE);
 
 		return builder.build();
-	}
+		}
 
-}
+		}

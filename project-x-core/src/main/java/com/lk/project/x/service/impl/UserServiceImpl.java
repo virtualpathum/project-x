@@ -1,7 +1,9 @@
 package com.lk.project.x.service.impl;
 
+import com.lk.project.x.entity.PasswordResetTokenEntity;
 import com.lk.project.x.entity.UserEntity;
 import com.lk.project.x.mapper.UserMapper;
+import com.lk.project.x.repo.PasswordResetTokenRepository;
 import com.lk.project.x.repo.UserRepository;
 import com.lk.project.x.resource.UserResource;
 import com.lk.project.x.service.UserService;
@@ -16,6 +18,9 @@ public class UserServiceImpl implements UserService {
 
     @Inject
     UserRepository repo;
+
+    @Inject
+    PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Inject
     UserMapper mapper;
@@ -48,5 +53,12 @@ public class UserServiceImpl implements UserService {
 
         entity = repo.saveAndFlush(entity);
         return mapper.updateResource(entity, resource);
+    }
+
+    @Override
+    public void createPasswordResetTokenForUser(UserResource resource, final String token) {
+        UserEntity entity = mapper.asEntity(resource);
+        final PasswordResetTokenEntity myToken = new PasswordResetTokenEntity(token, entity);
+        passwordResetTokenRepository.save(myToken);
     }
 }

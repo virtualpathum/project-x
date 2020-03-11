@@ -1,5 +1,7 @@
 package com.lk.project.x.entity;
 
+import com.lk.project.x.validator.ValidPassword;
+
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
@@ -19,6 +21,7 @@ public class UserEntity extends AbstractEntity {
 
     //@NotNull
     @Column(name="password", nullable=false)
+    //@ValidPassword
     private String password;
 
     //@NotNull
