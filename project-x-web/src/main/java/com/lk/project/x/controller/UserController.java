@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.inject.Qualifier;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +40,7 @@ public class UserController {
     private UserService service;
 
     @Inject
-    private MessageSource messages;
+    private MessageSource messageSource;
 
     @Inject
     private JavaMailSender mailSender;
@@ -54,11 +55,12 @@ public class UserController {
      * @param service the service
      */
     @Inject
-    public UserController(UserResourceFinder resourceFinder, UserService service, JavaMailSender mailSender, Environment env) {
+    public UserController(UserResourceFinder resourceFinder, UserService service, JavaMailSender mailSender, Environment env, MessageSource messages) {
         this.resourceFinder = resourceFinder;
         this.service = service;
         this.mailSender = mailSender;
         this.env = env;
+        this.messageSource = messages;
     }
 
     /**
@@ -152,19 +154,19 @@ public class UserController {
         service.createPasswordResetTokenForUser(user, token);
         mailSender.send(constructResetTokenEmail(getAppUrl(request),
                 request.getLocale(), token, user));
-        return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null,
+        return new GenericResponse(messageSource.getMessage("message.resetPasswordEmail", null,
                         request.getLocale()));
     }
 
     private SimpleMailMessage constructResendVerificationTokenEmail(final String contextPath, final Locale locale, final VerificationTokenEntity newToken, final UserResource user) {
         final String confirmationUrl = contextPath + "/registrationConfirm.html?token=" + newToken.getToken();
-        final String message = messages.getMessage("message.resendToken", null, locale);
+        final String message = messageSource.getMessage("message.resendToken", null, locale);
         return constructEmail("Resend Registration Token", message + " \r\n" + confirmationUrl, user);
     }
 
     private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final UserResource user) {
         final String url = contextPath + "/user/changePassword?id=" + user.getId() + "&token=" + token;
-        final String message = messages.getMessage("message.resetPassword", null, locale);
+        final String message = messageSource.getMessage("message.resetPassword", null, locale);
         return constructEmail("Reset Password", message + " \r\n" + url, user);
     }
 

@@ -120,7 +120,7 @@ public class SysConfig {
 		return mailSender;
 	}
 
-	@Bean
+/*	@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource
 				= new ReloadableResourceBundleMessageSource();
@@ -135,7 +135,7 @@ public class SysConfig {
 		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
 		bean.setValidationMessageSource(messageSource());
 		return bean;
-	}
+	}*/
 
 	
 	@Bean
