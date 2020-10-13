@@ -22,7 +22,7 @@
 		<com.fasterxml.jackson.core.version>2.10.1</com.fasterxml.jackson.core.version>
 		<fr.xebia.extras.selma.version>1.0</fr.xebia.extras.selma.version>
 		<fr.xebia.extras.selma-processor.version>1.0</fr.xebia.extras.selma-processor.version>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 
 
 	</properties>
