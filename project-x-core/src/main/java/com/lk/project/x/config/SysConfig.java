@@ -109,7 +109,7 @@ public class SysConfig {
 		mailSender.setPort(587);
 
 		mailSender.setUsername("virtualpathum@gmail.com");
-		mailSender.setPassword("rjzlymvcjnawbbye");
+		mailSender.setPassword("cjnvzfnbyuioakte");
 
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");
@@ -120,7 +120,7 @@ public class SysConfig {
 		return mailSender;
 	}
 
-/*	@Bean
+	/*@Bean
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource
 				= new ReloadableResourceBundleMessageSource();

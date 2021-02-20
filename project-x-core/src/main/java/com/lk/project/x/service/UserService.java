@@ -1,6 +1,8 @@
 package com.lk.project.x.service;
 
 import com.lk.project.x.entity.UserEntity;
+import com.lk.project.x.entity.VerificationTokenEntity;
+import com.lk.project.x.exception.UserAlreadyExistException;
 import com.lk.project.x.resource.UserResource;
 
 public interface UserService {
@@ -15,4 +17,15 @@ public interface UserService {
     void delete(Long id);
 
     void createPasswordResetTokenForUser(UserResource resource, String token);
+
+    UserResource registerNewUserAccount(UserResource resource)
+            throws UserAlreadyExistException;
+
+    UserResource getUser(String verificationToken);
+
+    void saveRegisteredUser(UserEntity entity);
+
+    void createVerificationToken(UserEntity entity, String token);
+
+    VerificationTokenEntity getVerificationToken(String VerificationToken);
 }

@@ -31,7 +31,7 @@ import javax.sql.DataSource;
 @EnableAutoConfiguration(exclude = {
         org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class
 })
-@EnableWebSecurity //Enables Spring Security
+@EnableWebSecurity //Enables Spring Security and and MVC integration
 @EnableGlobalMethodSecurity(
         securedEnabled = true, //It enables the @Secured annotation using which you can protect your controller/service methods
         jsr250Enabled = true, //It enables the @RolesAllowed annotation
@@ -88,7 +88,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
+                //.authenticationEntryPoint(unauthorizedHandler)
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -103,10 +103,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                // .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                // .permitAll()
-                .antMatchers("/api/blog/**", "/api/student/**")
+                .antMatchers("/api/blog/**", "/api/student/**","/api/user/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
+                //.and()
+               // .oauth2Login();
 
         // Add our custom JWT security filter
        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

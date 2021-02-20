@@ -10,7 +10,9 @@ import com.lk.project.x.util.GenericResponse;
 import com.lk.project.x.web.resource.finder.UserResourceFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceAware;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,10 +20,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.inject.Inject;
 import javax.inject.Qualifier;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -39,7 +45,7 @@ public class UserController {
     /** The service. */
     private UserService service;
 
-    @Inject
+    //@Inject
     private MessageSource messageSource;
 
     @Inject
@@ -54,13 +60,14 @@ public class UserController {
      * @param resourceFinder the resource finder
      * @param service the service
      */
-    @Inject
-    public UserController(UserResourceFinder resourceFinder, UserService service, JavaMailSender mailSender, Environment env, MessageSource messages) {
+    //@Inject
+    @Autowired
+    public UserController(UserResourceFinder resourceFinder, UserService service, JavaMailSender mailSender, Environment env, MessageSource messageSource) {
         this.resourceFinder = resourceFinder;
         this.service = service;
         this.mailSender = mailSender;
         this.env = env;
-        this.messageSource = messages;
+        this.messageSource = messageSource;
     }
 
     /**
@@ -93,7 +100,8 @@ public class UserController {
      * @param resource the resource
      * @return the student resource
      */
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    //@CrossOrigin(origins = "*", allowedHeaders = "*")
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/user/", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public UserResource create(@RequestBody UserResource resource) {
@@ -129,16 +137,36 @@ public class UserController {
         service.delete(id);
     }
 
-    /**
-     * Delete.
-     *
-     * @param id the id
-     */
+
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @RequestMapping(value = "/user/register", method = RequestMethod.DELETE)
-    public void register(@PathVariable("id") long id) {
-        logger.info("Fetching & Deleting User with id {}", id);
-        service.delete(id);
+    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
+    public String confirmRegistration(@RequestParam("token") String token) {
+
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                        .getRequest();
+
+        Locale locale = request.getLocale();
+
+        VerificationTokenEntity verificationToken = service.getVerificationToken(token);
+        if (verificationToken == null) {
+            System.out.println("//// messageSource : " + messageSource);
+            String message = messageSource.getMessage("auth.message.invalidToken", null, locale);
+            //model.addAttribute("message", message);
+            return "redirect:/badUser.html?lang=" + locale.getLanguage();
+        }
+
+        UserEntity user = verificationToken.getUser();
+        Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+            String messageValue = messageSource.getMessage("auth.message.expired", null, locale);
+            //model.addAttribute("message", messageValue);
+            return "redirect:/badUser.html?lang=" + locale.getLanguage();
+        }
+
+        user.setEnabled(true);
+        service.saveRegisteredUser(user);
+        return "redirect:/login.html?lang=" + request.getLocale().getLanguage();
     }
 
     @RequestMapping(value = "/user/resetPassword",
@@ -154,9 +182,24 @@ public class UserController {
         service.createPasswordResetTokenForUser(user, token);
         mailSender.send(constructResetTokenEmail(getAppUrl(request),
                 request.getLocale(), token, user));
-        return new GenericResponse(messageSource.getMessage("message.resetPasswordEmail", null,
-                        request.getLocale()));
+        return new GenericResponse(messageSource.getMessage("message.resetPasswordEmail", null,request.getLocale()));
+        //return new GenericResponse("You should receive an Password Reset Email shortly");
+
     }
+
+    /*@RequestMapping(value = "/user/changePassword",method = RequestMethod.POST)
+    public String showChangePasswßordPage(Locale locale,
+                                         @RequestParam("token") String token) {
+        String result = service.validatePasswordResetToken(token);
+        if(result != null) {
+            String message = messages.getMessage("auth.message." + result, null, locale);
+            return "redirect:/login.html?lang="
+                    + locale.getLanguage() + "&message=" + message;
+        } else {
+            model.addAttribute("token", token);
+            return "redirect:/updatePassword.html?lang=" + locale.getLanguage();
+        }
+    }*/
 
     private SimpleMailMessage constructResendVerificationTokenEmail(final String contextPath, final Locale locale, final VerificationTokenEntity newToken, final UserResource user) {
         final String confirmationUrl = contextPath + "/registrationConfirm.html?token=" + newToken.getToken();
@@ -184,5 +227,9 @@ public class UserController {
     }
 
 
+    /*@Override
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }*/
 }
 

@@ -1,6 +1,14 @@
 package com.lk.project.x.entity;
 
+/*
+* The VerificationToken entity must meet the following criteria:
 
+It must link back to the User (via a unidirectional relation)
+It will be created right after registration
+It will expire within 24 hours following its creation
+Has a unique, randomly generated value
+
+* */
 
 import javax.persistence.*;
 import java.util.Calendar;

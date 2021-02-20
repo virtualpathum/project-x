@@ -4,6 +4,7 @@ import com.lk.project.x.config.JwtTokenProvider;
 import com.lk.project.x.entity.RoleEntity;
 import com.lk.project.x.entity.RoleName;
 import com.lk.project.x.entity.UserEntity;
+import com.lk.project.x.events.OnRegistrationCompleteEvent;
 import com.lk.project.x.exception.AppException;
 import com.lk.project.x.payload.ApiResponse;
 import com.lk.project.x.payload.JwtAuthenticationResponse;
@@ -11,6 +12,7 @@ import com.lk.project.x.payload.LoginRequest;
 import com.lk.project.x.payload.SignUpRequest;
 import com.lk.project.x.repo.RoleRepository;
 import com.lk.project.x.repo.UserRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,9 +21,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
@@ -45,6 +50,12 @@ public class AuthController {
 
     @Inject
     JwtTokenProvider tokenProvider;
+
+    @Inject
+    ApplicationEventPublisher eventPublisher;
+
+    //@Inject
+    //private HttpServletRequest request;
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/signin")
@@ -85,11 +96,21 @@ public class AuthController {
 
         user.setRoles(Collections.singleton(userRole));
 
-        UserEntity result = userRepository.save(user);
+        UserEntity registeredUser = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/user/"+user.getId())
-                .buildAndExpand(result.getUserName()).toUri();
+                .buildAndExpand(registeredUser.getUserName()).toUri();
+
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                        .getRequest();
+
+
+        String appUrl = request.getContextPath();
+
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser,
+                request.getLocale(), appUrl));
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }

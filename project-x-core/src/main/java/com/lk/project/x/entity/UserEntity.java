@@ -10,10 +10,18 @@ import java.util.Set;
 @Table(name="tbl_user")
 public class UserEntity extends AbstractEntity {
 
+    public UserEntity() {
+        super();
+        this.enabled = false;
+    }
+
     /** The id. */
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "enabled")
+    private boolean enabled;// when the user activate the account via email, this become true
 
     //@NotEmpty
     @Column(name="user_name", nullable=false)
@@ -92,6 +100,14 @@ public class UserEntity extends AbstractEntity {
 
     public void setRoles(Set<RoleEntity> roles) {
         this.roles = roles;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
