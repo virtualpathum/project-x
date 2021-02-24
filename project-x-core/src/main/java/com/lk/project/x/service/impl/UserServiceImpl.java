@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Calendar;
 import java.util.Optional;
 
 @Named("userService")
@@ -111,4 +112,27 @@ public class UserServiceImpl implements UserService {
     public VerificationTokenEntity getVerificationToken(String VerificationToken) {
         return tokenRepository.findByToken(VerificationToken);
     }
+
+    @Override
+    public String validatePasswordResetToken(String token) {
+        final PasswordResetTokenEntity passToken = passwordResetTokenRepository.findByToken(token);
+
+        return !isTokenFound(passToken) ? "invalidToken"
+                : isTokenExpired(passToken) ? "expired"
+                : null;
+    }
+
+    private boolean isTokenFound(PasswordResetTokenEntity passToken) {
+        return passToken != null;
+    }
+
+    private boolean isTokenExpired(PasswordResetTokenEntity passToken) {
+        final Calendar cal = Calendar.getInstance();
+        return passToken.getExpiryDate().before(cal.getTime());
+    }
+
+   /* public void changeUserPassword(UserEntity user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        repo.save(user);
+    }*/
 }

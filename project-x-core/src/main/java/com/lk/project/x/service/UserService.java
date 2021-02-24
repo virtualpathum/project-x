@@ -28,4 +28,6 @@ public interface UserService {
     void createVerificationToken(UserEntity entity, String token);
 
     VerificationTokenEntity getVerificationToken(String VerificationToken);
+
+    String validatePasswordResetToken(String token);
 }
