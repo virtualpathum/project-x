@@ -131,8 +131,8 @@ public class UserServiceImpl implements UserService {
         return passToken.getExpiryDate().before(cal.getTime());
     }
 
-   /* public void changeUserPassword(UserEntity user, String password) {
+    public void changeUserPassword(UserEntity user, String password) {
         user.setPassword(passwordEncoder.encode(password));
         repo.save(user);
-    }*/
+    }
 }

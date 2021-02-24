@@ -1,6 +1,7 @@
 package com.lk.project.x.payload;/* Created by Dell on 30/12/2019 */
 
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotBlank;
 
 public class LoginRequest {
 

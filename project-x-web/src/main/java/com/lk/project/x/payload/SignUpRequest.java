@@ -1,8 +1,10 @@
 package com.lk.project.x.payload;/* Created by Dell on 30/12/2019 */
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
+//import org.hibernate.validator.constraints.;
+//import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class SignUpRequest {

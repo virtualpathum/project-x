@@ -157,7 +157,7 @@ public class UserController {
         return "redirect:/login.html?lang=" + request.getLocale().getLanguage();
     }
 
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping(value = "/user/changePassword", method = RequestMethod.GET)
     public String showChangePasswordPage(@RequestParam("token") String token) {
         String result = service.validatePasswordResetToken(token);
