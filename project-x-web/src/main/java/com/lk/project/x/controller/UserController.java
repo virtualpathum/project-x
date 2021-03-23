@@ -1,9 +1,16 @@
 
 package com.lk.project.x.controller;
 
+import com.lk.project.x.config.JwtTokenProvider;
+import com.lk.project.x.entity.RoleEntity;
 import com.lk.project.x.entity.UserEntity;
 import com.lk.project.x.entity.VerificationTokenEntity;
+import com.lk.project.x.events.OnRegistrationCompleteEvent;
 import com.lk.project.x.exception.UserNotFoundException;
+import com.lk.project.x.payload.ApiResponse;
+import com.lk.project.x.payload.SignUpRequest;
+import com.lk.project.x.repo.RoleRepository;
+import com.lk.project.x.repo.UserRepository;
 import com.lk.project.x.resource.UserResource;
 import com.lk.project.x.service.UserService;
 import com.lk.project.x.util.GenericResponse;
@@ -11,17 +18,25 @@ import com.lk.project.x.web.resource.finder.UserResourceFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.*;
 
 @CrossOrigin
@@ -31,17 +46,38 @@ public class UserController {
     /** The Constant logger. */
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    /** The resource finder. */
-    private final UserResourceFinder resourceFinder;
+   @Inject
+    private UserResourceFinder resourceFinder;
 
-    /** The service. */
-    private final UserService service;
+    @Inject
+    private UserService service;
 
-    private final MessageSource messageSource;
+    @Inject
+    private MessageSource messageSource;
 
-    private final JavaMailSender mailSender;
+    @Inject
+    private JavaMailSender mailSender;
 
-    private final Environment env;
+    @Inject
+    private Environment env;
+
+    @Inject
+    private AuthenticationManager authenticationManager;
+
+    @Inject
+    UserRepository userRepository;
+
+    @Inject
+    RoleRepository roleRepository;
+
+    @Inject
+    private PasswordEncoder passwordEncoder;
+
+    @Inject
+    private JwtTokenProvider tokenProvider;
+
+    @Inject
+    private ApplicationEventPublisher eventPublisher;
 
     /**
      * Instantiates a new student controller.
@@ -50,7 +86,7 @@ public class UserController {
      * @param service the service
      */
     @Autowired
-    public UserController(UserResourceFinder resourceFinder, UserService service, JavaMailSender mailSender, Environment env, MessageSource messageSource) {
+    public UserController(UserService service, JavaMailSender mailSender, Environment env, MessageSource messageSource, UserResourceFinder resourceFinder) {
         this.resourceFinder = resourceFinder;
         this.service = service;
         this.mailSender = mailSender;
@@ -82,12 +118,11 @@ public class UserController {
 
     }
 
-    /**
+   /* *//**
      * Creates.
      *
-     * @param resource the resource
      * @return the student resource
-     */
+     *//*
     //@CrossOrigin(origins = "*", allowedHeaders = "*")
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/user/", method = RequestMethod.POST)
@@ -96,6 +131,49 @@ public class UserController {
         logger.info("Creating User : {}", resource);
         return service.saveOrUpdate(resource);
 
+    }*/
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserResource resource) {
+        if(userRepository.existsByUserName(resource.getUserName())) {
+            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
+                    HttpStatus.OK);
+        }
+
+        if(userRepository.existsByEmail(resource.getEmail())) {
+            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+                    HttpStatus.OK);
+        }
+        // Creating user's account
+        UserEntity user = new UserEntity();
+        user.setFirstName(resource.getFirstName());
+        user.setLastName(resource.getLastName());
+        user.setUserName(resource.getUserName());
+        user.setEmail(resource.getEmail());
+        user.setPassword(passwordEncoder.encode(resource.getPassword()));
+
+        RoleEntity userRole = roleRepository.findByName("ROLE_USER");
+
+        user.setRoles(Collections.singleton(userRole));
+
+        UserEntity registeredUser = userRepository.save(user);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath().path("/api/user/"+user.getId())
+                .buildAndExpand(registeredUser.getUserName()).toUri();
+
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                        .getRequest();
+
+
+        String appUrl = request.getContextPath();
+
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser,
+                request.getLocale(), appUrl));
+
+        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
 
     /**
@@ -211,7 +289,7 @@ public class UserController {
     }
 
     private String getAppUrl(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        return "http://" + request.getServerName() + ":" + "8070" + request.getContextPath();
     }
 
 

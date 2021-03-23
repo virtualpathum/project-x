@@ -9,23 +9,22 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.lk.project.x.entity.StudentEntity;
-import com.lk.project.x.mapper.StudentMapper;
 import com.lk.project.x.repo.StudentRepository;
 import com.lk.project.x.resource.StudentResource;
-
+import org.modelmapper.ModelMapper;
 
 
 /**
  * The Class BookingResourceFinderImpl.
  * @author virtualpathum
  */
-@Named("studentResourceFinder")
+//@Named("studentResourceFinder")
 public class StudentResourceFinderImpl extends AbstractResourceFinder<StudentResource, StudentEntity, StudentRepository, Long> implements StudentResourceFinder {
 	/** The mapper. */
-	private StudentMapper mapper;
+	private ModelMapper mapper;
 	
 	@Inject
-	public StudentResourceFinderImpl(StudentRepository repo, StudentMapper mapper) {
+	public StudentResourceFinderImpl(StudentRepository repo, ModelMapper mapper) {
 		super(repo);
 		this.mapper = mapper;
 	}
@@ -33,14 +32,14 @@ public class StudentResourceFinderImpl extends AbstractResourceFinder<StudentRes
 	@Override
 	protected StudentResource toResource(StudentEntity entity) {
 		
-		return mapper.asResource(entity);
+		return mapper.map(entity, StudentResource.class);
 	}
 
 	@Override
 	public StudentResource findById(Long id) {
 
 		StudentEntity entity = repo.findById(id).orElse(null);
-		return mapper.asResource(entity);
+		return mapper.map(entity, StudentResource.class);
 		
 	}
 

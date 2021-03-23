@@ -3,14 +3,15 @@
  */
 package com.lk.project.x;
 
-import com.lk.project.x.config.SysConfig;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -26,9 +27,17 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author virtualpathum
  * The Class SpringBootStudentApp.
  */
-@Import({SysConfig.class})
-@SpringBootApplication(scanBasePackages={"com.lk.project.x"})
+//@Import({SysConfig.class})
+//@Configuration
+//@ComponentScan(basePackages = {
+//		"com.lk.project.x.mapper",
+//		"com.lk.project.x.service" })
+
+//@EnableJpaRepositories(basePackages = {"com.lk.project.x.repo" })
+//@PropertySource({ "classpath:application.properties" })
+//@EnableTransactionManagement
 @EnableSwagger2
+@SpringBootApplication(scanBasePackages = "com.lk.project")
 public class SpringBootMain {
 
 	/**
@@ -44,9 +53,15 @@ public class SpringBootMain {
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.any())
+				.apis(RequestHandlerSelectors.basePackage("com.lk.project.x.controller") )
 				.paths(PathSelectors.any())
 				.build();
+	}
+
+	@Bean
+	public ModelMapper modelMapper() {
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper;
 	}
 
 

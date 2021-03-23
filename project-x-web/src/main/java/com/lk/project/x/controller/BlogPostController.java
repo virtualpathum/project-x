@@ -1,3 +1,4 @@
+/*
 package com.lk.project.x.controller;
 
 import com.lk.project.x.resource.BlogPostResource;
@@ -17,32 +18,42 @@ import java.util.List;
 @RequestMapping("/api")
 public class BlogPostController {
 
-    /** The Constant logger. */
+    */
+/** The Constant logger. *//*
+
     public static final Logger logger = LoggerFactory.getLogger(BlogPostController.class);
 
-    /** The resource finder. */
+    */
+/** The resource finder. *//*
+
     private BlogPostResourceFinder resourceFinder;
 
-    /** The service. */
+    */
+/** The service. *//*
+
     private BlogPostService service;
 
-    /**
+    */
+/**
      * Instantiates a new student controller.
      *
      * @param resourceFinder the resource finder
      * @param service the service
-     */
+     *//*
+
     @Inject
     public BlogPostController(BlogPostResourceFinder resourceFinder, BlogPostService service) {
         this.resourceFinder = resourceFinder;
         this.service = service;
     }
 
-    /**
+    */
+/**
      * List all students.
      *
      * @return the list
-     */
+     *//*
+
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/blog/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -62,12 +73,14 @@ public class BlogPostController {
 
     }
 
-    /**
+    */
+/**
      * Creates the student.
      *
      * @param resource the resource
      * @return the student resource
-     */
+     *//*
+
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/blog/", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
@@ -77,13 +90,15 @@ public class BlogPostController {
 
     }
 
-    /**
+    */
+/**
      * Update student.
      *
      * @param id the id
      * @param resource the resource
      * @return the student resource
-     */
+     *//*
+
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/blog/{id}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
@@ -92,11 +107,13 @@ public class BlogPostController {
         return service.saveOrUpdate(resource);
     }
 
-    /**
+    */
+/**
      * Delete student.
      *
      * @param id the id
-     */
+     *//*
+
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/blog/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") long id) {
@@ -104,3 +121,4 @@ public class BlogPostController {
         service.delete(id);
     }
 }
+*/

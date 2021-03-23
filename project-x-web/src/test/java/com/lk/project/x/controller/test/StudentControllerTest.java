@@ -1,6 +1,7 @@
 /**
  * Created On : 18 Aug 2017
- */
+ *//*
+
 package com.lk.project.x.controller.test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,7 +12,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.lk.project.x.controller.StudentController;
 
 import org.junit.Test;
 
@@ -20,25 +20,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+*/
 /**
  * The Class StudentControllerTest.
  *
  * @author virtualpathum
- */
+ *//*
+
 //TODO:These test cases had develop to test the system configuration and flow of the system
 // Need to use Jmokit to mock the services
 public class StudentControllerTest extends AbstractControllerTest {
 	
 	Logger LOG = LoggerFactory.getLogger(StudentControllerTest.class);
 	
-	/** The controller. */
+	*/
+/** The controller. *//*
+
 	@Inject
 	StudentController controller;
 	
 	
-	/**
+	*/
+/**
 	 * Test create student method.
-	 */
+	 *//*
+
 	@Test
 	//@Transactional
 	public void testCreateStudentMethod() {
@@ -55,9 +61,11 @@ public class StudentControllerTest extends AbstractControllerTest {
 
 	}
 	
-	/**
+	*/
+/**
 	 * Test list all students method.
-	 */
+	 *//*
+
 	@Test
 	public void testListAllStudentsMethod() {
 		
@@ -68,9 +76,11 @@ public class StudentControllerTest extends AbstractControllerTest {
 
 	}
 	
-	/**
+	*/
+/**
 	 * Test get student method.
-	 */
+	 *//*
+
 	@Test
 	public void testGetStudentMethod() {
 		
@@ -79,9 +89,11 @@ public class StudentControllerTest extends AbstractControllerTest {
 
 	}
 	
-	/**
+	*/
+/**
 	 * Test update student method.
-	 */
+	 *//*
+
 	@Test
 	public void testUpdateStudentMethod() {
 		
@@ -94,9 +106,11 @@ public class StudentControllerTest extends AbstractControllerTest {
 
 	}
 	
-	/**
+	*/
+/**
 	 * Test delete student method.
-	 */
+	 *//*
+
 	//@Test
 	public void testDeleteStudentMethod() {
 		
@@ -113,3 +127,4 @@ public class StudentControllerTest extends AbstractControllerTest {
 
 
 }
+*/
