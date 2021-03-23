@@ -1,4 +1,4 @@
 /project-x-web/.gradle/
-/project-x-web/.idea/
+/.idea/
 /project-x-web/target/
 /project-x-web/build/
