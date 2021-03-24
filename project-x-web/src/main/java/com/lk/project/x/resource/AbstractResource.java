@@ -13,6 +13,8 @@ import java.io.Serializable;
  * @param <T> the generic type
  */
 public abstract class AbstractResource<T extends Serializable> implements Resource<T> {
+
+	public AbstractResource(){}
 	
 	/** The resource id. */
 	protected T id;

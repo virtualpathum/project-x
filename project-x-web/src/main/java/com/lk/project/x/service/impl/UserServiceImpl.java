@@ -9,12 +9,17 @@ import com.lk.project.x.repo.UserRepository;
 import com.lk.project.x.repo.VerificationTokenRepository;
 import com.lk.project.x.resource.UserResource;
 import com.lk.project.x.service.UserService;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Named("userService")
 public class UserServiceImpl implements UserService {
@@ -25,8 +30,8 @@ public class UserServiceImpl implements UserService {
     @Inject
     PasswordResetTokenRepository passwordResetTokenRepository;
 
-    /*@Inject
-    UserMapper mapper;*/
+    @Inject
+    ModelMapper mapper;
 
 
     @Inject
@@ -135,6 +140,16 @@ public class UserServiceImpl implements UserService {
                 : null;
     }
 
+    @Override
+    public List<UserResource> findAll() {
+        mapper.getConfiguration()
+                .setFieldMatchingEnabled(true)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
+        List<UserResource> userList = new ArrayList<UserResource>();
+        //mapper.map(repo.findAll(),userList);
+        return mapList(repo.findAll(),UserResource.class);
+    }
+
     private boolean isTokenFound(PasswordResetTokenEntity passToken) {
         return passToken != null;
     }
@@ -147,5 +162,12 @@ public class UserServiceImpl implements UserService {
     public void changeUserPassword(UserEntity user, String password) {
         //user.setPassword(passwordEncoder.encode(password));
         repo.save(user);
+    }
+
+    private <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
+        return source
+                .stream()
+                .map(element -> mapper.map(element, targetClass))
+                .collect(Collectors.toList());
     }
 }

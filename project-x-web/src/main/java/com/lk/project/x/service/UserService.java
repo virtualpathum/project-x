@@ -5,6 +5,8 @@ import com.lk.project.x.entity.VerificationTokenEntity;
 import com.lk.project.x.exception.UserAlreadyExistException;
 import com.lk.project.x.resource.UserResource;
 
+import java.util.List;
+
 public interface UserService {
 
     UserResource saveOrUpdate (UserResource resource);
@@ -30,4 +32,6 @@ public interface UserService {
     VerificationTokenEntity getVerificationToken(String VerificationToken);
 
     String validatePasswordResetToken(String token);
+
+    List<UserResource> findAll();
 }

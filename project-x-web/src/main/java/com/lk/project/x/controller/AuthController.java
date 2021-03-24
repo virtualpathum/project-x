@@ -12,8 +12,12 @@ import com.lk.project.x.payload.LoginRequest;
 import com.lk.project.x.payload.SignUpRequest;
 import com.lk.project.x.repo.RoleRepository;
 import com.lk.project.x.repo.UserRepository;
+import com.lk.project.x.resource.UserResource;
+import com.lk.project.x.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
+import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -38,6 +43,9 @@ public class AuthController {
 
     @Inject
     AuthenticationManager authenticationManager;
+
+    @Inject
+    ModelMapper mapper;
 
     @Inject
     UserRepository userRepository;
@@ -53,6 +61,9 @@ public class AuthController {
 
     @Inject
     ApplicationEventPublisher eventPublisher;
+
+    @Inject
+    UserService userService;
 
     //@Inject
     //private HttpServletRequest request;
@@ -85,11 +96,8 @@ public class AuthController {
             return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.OK);
         }
-        // Creating user's account
-        UserEntity user = new UserEntity();
-        user.setFirstName(signUpRequest.getName());
-        user.setUserName(signUpRequest.getUsername());
-        user.setEmail(signUpRequest.getEmail());
+
+        UserEntity user =  mapper.map(signUpRequest,UserEntity.class);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
         RoleEntity userRole = roleRepository.findByName("ROLE_USER");
@@ -113,5 +121,13 @@ public class AuthController {
                 request.getLocale(), appUrl));
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @RequestMapping(value = "/user/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserResource> listAll() {
+        //logger.info("Fetching Users");
+        return userService.findAll();
     }
 }

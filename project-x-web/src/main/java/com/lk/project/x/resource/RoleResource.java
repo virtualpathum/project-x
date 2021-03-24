@@ -4,6 +4,10 @@ public class RoleResource extends AbstractResource<Long> {
 
     private String name;
 
+    public RoleResource(){
+        super();
+    }
+
     /**
      * Instantiates a new abstract resource.
      *
