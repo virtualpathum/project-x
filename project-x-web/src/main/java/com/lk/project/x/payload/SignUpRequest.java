@@ -6,6 +6,7 @@ package com.lk.project.x.payload;/* Created by Dell on 30/12/2019 */
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 public class SignUpRequest {
 
@@ -25,6 +26,8 @@ public class SignUpRequest {
     @NotBlank
     @Size(min = 6, max = 20)
     private String password;
+
+    private Set<String> roles;
 
     public String getName() {
         return name;
@@ -56,6 +59,14 @@ public class SignUpRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<String> getRoles() {
+        return this.roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
 }

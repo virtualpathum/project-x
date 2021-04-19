@@ -12,7 +12,17 @@ public class RoleEntity extends AbstractEntity {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private RoleName name;
+
+    public RoleEntity() {
+
+    }
+
+    public RoleEntity(RoleName name) {
+        this.name = name;
+    }
 
     @ManyToMany(mappedBy = "roles")
     private Set<UserEntity> users;
@@ -25,11 +35,11 @@ public class RoleEntity extends AbstractEntity {
         this.id = id;
     }
 
-    public String getName() {
+    public RoleName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(RoleName name) {
         this.name = name;
     }
 

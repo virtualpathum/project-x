@@ -1,5 +1,6 @@
 package com.lk.project.x.controller;/* Created by Dell on 30/12/2019 */
 
+import com.lk.project.x.authentication.UserPrincipal;
 import com.lk.project.x.config.JwtTokenProvider;
 import com.lk.project.x.entity.RoleEntity;
 import com.lk.project.x.entity.RoleName;
@@ -34,7 +35,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -81,7 +85,15 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt,userDetails.getId(),
+                userDetails.getUsername(),
+                userDetails.getEmail(),
+                roles));
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -97,12 +109,41 @@ public class AuthController {
                     HttpStatus.OK);
         }
 
+        Set<String> roleList = signUpRequest.getRoles();
+        Set<RoleEntity> roles = new HashSet<>();
+        if (roleList == null) {
+            RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER.name())
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+        } else {
+            roleList.forEach(role -> {
+                switch (role) {
+                    case "admin":
+                        RoleEntity adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN.name())
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(adminRole);
+
+                        break;
+                    case "mod":
+                        RoleEntity modRole = roleRepository.findByName(RoleName.ROLE_MODERATOR.name())
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(modRole);
+
+                        break;
+                    default:
+                        RoleEntity userRole = roleRepository.findByName(RoleName.ROLE_USER.name())
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(userRole);
+                }
+            });
+        }
+
         UserEntity user =  mapper.map(signUpRequest,UserEntity.class);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
-        RoleEntity userRole = roleRepository.findByName("ROLE_USER");
+        //RoleEntity userRole = roleRepository.findByName("ROLE_USER");
 
-        user.setRoles(Collections.singleton(userRole));
+        user.setRoles(roles);
 
         UserEntity registeredUser = userRepository.save(user);
 

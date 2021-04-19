@@ -133,7 +133,7 @@ public class UserController {
 
     }*/
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    /*@CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserResource resource) {
         if(userRepository.existsByUserName(resource.getUserName())) {
@@ -153,9 +153,9 @@ public class UserController {
         user.setEmail(resource.getEmail());
         user.setPassword(passwordEncoder.encode(resource.getPassword()));
 
-        RoleEntity userRole = roleRepository.findByName("ROLE_USER");
+        Optional<RoleEntity> userRole = roleRepository.findByName("ROLE_USER");
 
-        user.setRoles(Collections.singleton(userRole));
+        user.setRoles(userRole);
 
         UserEntity registeredUser = userRepository.save(user);
 
@@ -174,7 +174,7 @@ public class UserController {
                 request.getLocale(), appUrl));
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
-    }
+    }*/
 
     /**
      * Update.
@@ -205,8 +205,9 @@ public class UserController {
 
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/confirm", method = RequestMethod.POST)
     public String confirmRegistration(@RequestParam("token") String token) {
+        System.out.println("///// inside confirmRegistration : " + token);
 
         HttpServletRequest request =
                 ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))

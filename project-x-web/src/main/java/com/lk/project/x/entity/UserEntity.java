@@ -1,6 +1,7 @@
 package com.lk.project.x.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -41,8 +42,14 @@ public class UserEntity extends AbstractEntity {
     @Column(name="email", nullable=false)
     private String email;
 
-    @ManyToMany
-    private Set<RoleEntity> roles;
+    /*@ManyToMany
+    private Set<RoleEntity> roles;*/
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<RoleEntity> roles = new HashSet<>();
 
     public Long getId() {
         return id;

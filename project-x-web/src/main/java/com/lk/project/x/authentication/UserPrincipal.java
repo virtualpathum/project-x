@@ -20,7 +20,7 @@ public class UserPrincipal implements UserDetails {
 
     private String username;
 
-    @JsonIgnore
+    //@JsonIgnore
     private String email;
 
     @JsonIgnore
@@ -39,7 +39,7 @@ public class UserPrincipal implements UserDetails {
 
     public static UserPrincipal create(UserEntity user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getName())
+                new SimpleGrantedAuthority(role.getName().name())
         ).collect(Collectors.toList());
 
         return new UserPrincipal(
@@ -69,6 +69,10 @@ public class UserPrincipal implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override
