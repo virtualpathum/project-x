@@ -1,6 +1,0 @@
----
-server:
-  port: 8070
-  servlet:
-      contextPath: /project-x
----
