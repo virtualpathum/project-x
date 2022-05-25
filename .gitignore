@@ -1,0 +1,6 @@
+/project-x-web/.gradle/
+/.idea/
+/project-x-web/target/
+/project-x-web/build/
+/build/
+/.gradle/
