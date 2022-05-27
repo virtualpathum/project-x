@@ -80,10 +80,11 @@ dependencies {
 
 group = 'com.lk.project.x'
 version = '1.0.0'
-description = 'project-x web'
+description = 'project-x'
 
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
 //apply plugin: "net.ltgt.apt"
 
 /*publishing {
@@ -96,6 +97,14 @@ apply plugin: 'io.spring.dependency-management'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+bootJar {
+    mainClassName = 'com.lk.project.x.SpringBootMain'
+}
+
+bootRun {
+    main = 'com.lk.project.x.SpringBootMain'
 }
 
 /*sourceSets {

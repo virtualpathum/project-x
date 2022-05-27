@@ -23,7 +23,7 @@ public class AppErrorController implements ErrorController {
                 return "500";
             }
         }
-        return "error";
+        return "errorPage";
     }
 
     @Override
